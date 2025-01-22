@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import CourseCard from "./components/CourseCard";
 import Footer from "./components/Footer";
@@ -8,6 +7,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Enroll from "./components/Enroll";
 import Profile from "./components/Profile";
+import About from "./components/About"
 
 // Sample course data
 const courses = [
@@ -53,9 +53,6 @@ const App = () => {
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
-        {/* Navbar */}
-        <Navbar />
-
         {/* Routes */}
         <Routes>
           {/* Home Page */}
@@ -86,6 +83,9 @@ const App = () => {
 
           {/* Signup Page */}
           <Route path="/signup" element={<Signup />} />
+
+                    {/* About Page */}
+                    <Route path="/About" element={<About />} />
 
           {/* Enroll Page */}
           <Route path="/enroll/:courseId" element={<Enroll />} />
