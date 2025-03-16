@@ -1,18 +1,43 @@
 import * as React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route,Link } from "react-router-dom";
 import { useState } from "react";
-import { NavigationMenu } from "radix-ui";
+import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import classNames from "classnames";
-import { CaretDownIcon, PersonIcon } from "@radix-ui/react-icons";
+import { CaretDownIcon } from "@radix-ui/react-icons";
 import "./index.css";
 import PropTypes from "prop-types";
 import SearchBar from "./components/SearchBar";
 import Footer from "./components/Footer";
 import CourseCard from "./components/CourseCard";
+import RoleSelection from "./components/RoleSelection";
+import AuthPage from "./components/Authentification";
+import { Parallax } from 'react-parallax';
+import ProfileLibraryPage from "./ProfilePage";
+
 
 const App = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState(null);
+  
+  const handleSelectRole = (role) => {
+    setSelectedRole(role);
+    setIsRoleModalOpen(false);
+    setIsAuthModalOpen(true);
+  };
+  const handleAuthSubmit = ({ email, password, role }) => {
+    console.log('Login attempt:', { email, password, role });
+    // Here you would typically:
+    // 1. Call your authentication API
+    // 2. Handle loading state
+    // 3. Handle success/error responses
+    // 4. Redirect or update UI based on authentication result
+  };
+
+
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -79,6 +104,8 @@ const App = () => {
 
   return (
     <Router>
+      <div className="h-screen w-full bg-fixed bg-cover bg-center" style={{ backgroundImage: "url('./assets/amphitheater.jpg')"}}>
+
       <div className="flex flex-col min-h-screen">
         <div className="flex items-center justify-between p-4 space-x-4">
           {/* Navigation Menu - Left Side */}
@@ -146,42 +173,35 @@ const App = () => {
               className="w-full max-w-md"
             />
           </div>
-
           {/* Login/Register Button - Right Side */}
           <div>
+            {/* Button to open role selection */}
             <button
-              onClick={toggleLoginModal}
-              className="
-            flex 
-            items-center 
-            justify-center 
-            w-10 
-            h-10 
-            bg-blue-500 
-            text-white 
-            rounded-full 
-            hover:bg-blue-600 
-            transition-colors 
-            duration-300
-          "
+              onClick={() => setIsRoleModalOpen(true)}
+              className="px-4 py-2 bg-green-500 text-white rounded-md"
             >
-              <PersonIcon className="w-6 h-6" />
+              Connexion
             </button>
 
-            {/* Optional: Login Modal (can be expanded later) */}
-            {isLoginModalOpen && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div className="bg-white p-6 rounded-lg shadow-xl">
-                  <h2 className="text-xl font-bold mb-4">Login / Register</h2>
-                  {/* Add login form or registration toggle here */}
-                  <button
-                    onClick={toggleLoginModal}
-                    className="mt-4 bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
+            {/* Role selection popup */}
+            <RoleSelection
+              isOpen={isRoleModalOpen}
+              onClose={() => setIsRoleModalOpen(false)}
+              onSelectRole={handleSelectRole}
+            />
+
+            {/* Auth page popup */}
+            {selectedRole && (
+              <AuthPage
+                role={selectedRole}
+                isOpen={isAuthModalOpen}
+                onClose={() => setIsAuthModalOpen(false)}
+                onBack={() => {
+                  setIsAuthModalOpen(false);
+                  setIsRoleModalOpen(true);
+                }}
+                onSubmit={handleAuthSubmit}
+              />
             )}
           </div>
         </div>
@@ -203,6 +223,8 @@ const App = () => {
               >
                 Découvrez nos cours →
               </a>
+               
+              
             </div>
           </div>
         </div>
@@ -242,6 +264,7 @@ const App = () => {
         </div>
 
         <Footer />
+      </div>
       </div>
     </Router>
   );
