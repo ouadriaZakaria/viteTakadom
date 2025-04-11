@@ -11,8 +11,7 @@ import Footer from "./components/Footer";
 import CourseCard from "./components/CourseCard";
 import RoleSelection from "./components/RoleSelection";
 import AuthPage from "./components/Authentification";
-import { Parallax } from 'react-parallax';
-import ProfileLibraryPage from "./ProfilePage";
+
 
 
 const App = () => {

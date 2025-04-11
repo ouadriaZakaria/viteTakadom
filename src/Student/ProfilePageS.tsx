@@ -94,7 +94,17 @@ const ProfileLibraryPage = () => {
   const courses = getCoursesForTab();
   
   // Course card component
-  const CourseCard = ({ course }) => (
+  interface Course {
+    id: number;
+    title: string;
+    instructor: string;
+    thumbnail: string;
+    categories: string[];
+    progress: number;
+    saved: boolean;
+  }
+  
+  const CourseCard = ({ course }: { course: Course }) => (
     <div className={`bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ${viewMode === 'grid' ? 'w-full' : 'flex'}`}>
       <div className={viewMode === 'grid' ? 'w-full aspect-video' : 'w-1/4'}>
         <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover" />
